@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ViveView MindMap</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Lucide icons for a pro look -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts: Inter and Outfit for modern typography -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Main Header / File Menu -->
+        <header class="top-nav">
+            <div class="logo">
+                <i data-lucide="brain-circuit" class="logo-icon"></i>
+                <span>ViveView MindMap</span>
+            </div>
+            <div class="header-actions">
+                <div class="search-container">
+                    <i data-lucide="search" class="search-icon"></i>
+                    <input type="text" id="searchInput" placeholder="Search nodes..." class="nav-input">
+                </div>
+                <div class="divider-header"></div>
+                <div class="history-actions">
+                    <button id="undoBtn" class="nav-btn" title="Undo (Ctrl+Z)">
+                        <i data-lucide="undo"></i>
+                    </button>
+                    <button id="redoBtn" class="nav-btn" title="Redo (Ctrl+Y)">
+                        <i data-lucide="redo"></i>
+                    </button>
+                </div>
+                <button id="autoLayoutBtn" class="nav-btn" title="Auto-Layout (L)">
+                    <i data-lucide="layout-grid"></i>
+                    <span>Auto-Layout</span>
+                </button>
+                <div class="divider-header"></div>
+                <button id="outlineBtn" class="nav-btn primary" title="View Outline (O)">
+                    <i data-lucide="file-text"></i>
+                    <span>Outline</span>
+                </button>
+                <div class="divider-header"></div>
+                <button id="importBtn" class="nav-btn" title="Open Workspace (Ctrl+O)">
+                    <i data-lucide="file-up"></i>
+                    <span>Open</span>
+                </button>
+                <input type="file" id="importInput" accept=".json" class="hidden">
+                <button id="saveBtn" class="nav-btn" title="Save Map (Ctrl+S)">
+                    <i data-lucide="save"></i>
+                    <span>Save</span>
+                </button>
+                <button id="exportJSONBtn" class="nav-btn" title="Download Workspace (.json)">
+                    <i data-lucide="file-json"></i>
+                    <span>Workspace</span>
+                </button>
+                <button id="exportBtn" class="nav-btn primary" title="Export as PNG Image">
+                    <i data-lucide="download"></i>
+                    <span>PNG</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Floating Tool Toolbar -->
+        <nav class="toolbar">
+            <div class="tool-group">
+                <button id="addNodeBtn" class="tool-btn active" title="Add Node (A)">
+                    <i data-lucide="plus-circle"></i>
+                </button>
+                <button id="deleteNodeBtn" class="tool-btn" title="Delete Node (Del)">
+                    <i data-lucide="trash-2"></i>
+                </button>
+            </div>
+            <div class="divider"></div>
+            <div class="tool-group">
+                <button id="zoomInBtn" class="tool-btn" title="Zoom In (+)">
+                    <i data-lucide="zoom-in"></i>
+                </button>
+                <button id="zoomOutBtn" class="tool-btn" title="Zoom Out (-)">
+                    <i data-lucide="zoom-out"></i>
+                </button>
+                <button id="resetViewBtn" class="tool-btn" title="Reset View (R)">
+                    <i data-lucide="maximize"></i>
+                </button>
+            </div>
+            <div class="divider"></div>
+            <div class="tool-group">
+                <button id="themeToggleBtn" class="tool-btn" title="Theme: Cosmic">
+                    <i data-lucide="moon"></i>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main SVG Canvas Area -->
+        <main class="viewport" id="mindMapViewport">
+            <svg id="mindMapCanvas" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <!-- Blue Gradient -->
+                    <linearGradient id="grad-blue" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#2563eb;stop-opacity:1" />
+                    </linearGradient>
+                    <!-- Emerald Gradient -->
+                    <linearGradient id="grad-emerald" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+                    </linearGradient>
+                    <!-- Violet Gradient -->
+                    <linearGradient id="grad-violet" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+                    </linearGradient>
+                    <!-- Rose Gradient -->
+                    <linearGradient id="grad-rose" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#f43f5e;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#e11d48;stop-opacity:1" />
+                    </linearGradient>
+                    <!-- Amber Gradient -->
+                    <linearGradient id="grad-amber" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+                    </linearGradient>
+                </defs>
+                <!-- Group for connections -->
+                <g id="linksGroup"></g>
+                <!-- Group for nodes -->
+                <g id="nodesGroup"></g>
+            </svg>
+        </main>
+
+        <!-- Properties Panel (Contextual) -->
+        <aside id="propertiesPanel" class="side-panel hidden">
+            <div class="panel-header">
+                <h3>Node Properties</h3>
+                <button id="closePanelBtn" class="close-btn"><i data-lucide="x"></i></button>
+            </div>
+            <div class="panel-content">
+                <div class="prop-group">
+                    <label>Text Content</label>
+                    <textarea id="nodeText" placeholder="Node text..."></textarea>
+                </div>
+                <div class="prop-group">
+                    <label>Node Shape</label>
+                    <div class="shape-grid" id="shapePicker">
+                        <button class="shape-option selected" data-shape="pill" title="Pill"><i data-lucide="rectangle-horizontal"></i></button>
+                        <button class="shape-option" data-shape="rect" title="Rectangle"><i data-lucide="square"></i></button>
+                        <button class="shape-option" data-shape="circle" title="Circle"><i data-lucide="circle"></i></button>
+                        <button class="shape-option" data-shape="diamond" title="Diamond"><i data-lucide="diamond"></i></button>
+                    </div>
+                </div>
+                <div class="prop-group">
+                    <label>Node Style</label>
+                    <div class="color-grid" id="colorPicker">
+                        <div class="color-option selected" style="background:#3b82f6;" data-class="node-gradient-blue" data-color="#3b82f6"></div>
+                        <div class="color-option" style="background:#10b981;" data-class="node-gradient-emerald" data-color="#10b981"></div>
+                        <div class="color-option" style="background:#8b5cf6;" data-class="node-gradient-violet" data-color="#8b5cf6"></div>
+                        <div class="color-option" style="background:#f43f5e;" data-class="node-gradient-rose" data-color="#f43f5e"></div>
+                        <div class="color-option" style="background:#f59e0b;" data-class="node-gradient-amber" data-color="#f59e0b"></div>
+                    </div>
+                </div>
+                <div class="prop-group">
+                    <label>Study Status</label>
+                    <div class="status-selector" id="statusSelector">
+                        <button class="status-option selected" data-status="none" title="None">⚪</button>
+                        <button class="status-option" data-status="to-learn" title="To Learn">🔴</button>
+                        <button class="status-option" data-status="learning" title="Learning">🟡</button>
+                        <button class="status-option" data-status="mastered" title="Mastered">🟢</button>
+                    </div>
+                </div>
+                <div class="prop-group">
+                    <label>Study Notes</label>
+                    <textarea id="studyNotes" placeholder="Detailed study notes, definitions..."></textarea>
+                </div>
+                <div class="prop-group">
+                    <button id="toggleFoldBtn" class="action-btn secondary">
+                        <i data-lucide="git-merge"></i>
+                        <span>Collapse Subtree</span>
+                    </button>
+                    <button id="addChildBtn" class="action-btn">
+                        <i data-lucide="git-branch"></i>
+                        <span>Add Child Node</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Minimap -->
+        <div id="minimapContainer" class="minimap-container">
+            <svg id="minimapSvg" width="200" height="150"></svg>
+            <div id="minimapViewportRect" class="minimap-rect"></div>
+        </div>
+
+        <!-- Hint Overlay -->
+        <div class="hint-overlay">
+            <span>Double click to add node • Drag to move • Mouse wheel to zoom • Ctrl+Z/Y to Undo/Redo</span>
+        </div>
+
+        <!-- Outline Modal -->
+        <div id="outlineModal" class="modal hidden">
+            <div class="modal-container">
+                <div class="modal-header">
+                    <h3>Map Outline</h3>
+                    <div class="modal-actions">
+                        <button id="copyOutlineBtn" class="nav-btn small">
+                            <i data-lucide="copy"></i>
+                            <span>Copy</span>
+                        </button>
+                        <button id="closeOutlineBtn" class="close-btn">
+                            <i data-lucide="x"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <pre id="outlineContent"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js" type="module"></script>
+    <script>
+        // Init Lucide
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>

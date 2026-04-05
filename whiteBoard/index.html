@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ViveView Whiteboard</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Using Lucide icons for that clean look -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- File Dropdown (Top-Left) -->
+        <div class="file-dropdown-container">
+            <button id="fileBtn" class="toolbar-btn file-btn">
+                <i data-lucide="menu"></i>
+                <span>File</span>
+            </button>
+            <div id="fileMenu" class="dropdown-menu hidden">
+                <button id="newFileBtn" class="menu-item">
+                    <i data-lucide="file-plus"></i>
+                    <span>New Whiteboard</span>
+                </button>
+                <button id="saveFileBtn" class="menu-item">
+                    <i data-lucide="save"></i>
+                    <span>Save to Browser</span>
+                </button>
+                <button id="loadFileBtn" class="menu-item">
+                    <i data-lucide="folder-open"></i>
+                    <span>Load Last Save</span>
+                </button>
+                <div class="menu-divider"></div>
+                <button id="exportFileBtn" class="menu-item">
+                    <i data-lucide="download"></i>
+                    <span>Export PNG</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Top Toolbar (Tools) -->
+        <nav class="toolbar top-toolbar">
+            <button id="undoBtn" class="tool-btn" title="Undo (Ctrl+Z)">
+                <i data-lucide="undo-2"></i>
+            </button>
+            <button id="redoBtn" class="tool-btn" title="Redo (Ctrl+Y)">
+                <i data-lucide="redo-2"></i>
+            </button>
+            <div class="divider"></div>
+            <button id="selectBtn" class="tool-btn" title="Select (S)">
+                <i data-lucide="mouse-pointer"></i>
+            </button>
+            <button id="brushBtn" class="tool-btn active" title="Brush (B)">
+                <i data-lucide="pencil"></i>
+            </button>
+            <button id="rectBtn" class="tool-btn" title="Rectangle (R)">
+                <i data-lucide="square"></i>
+            </button>
+            <button id="circleBtn" class="tool-btn" title="Circle (O)">
+                <i data-lucide="circle"></i>
+            </button>
+            <div class="more-tools-container">
+                <button id="moreToolsBtn" class="tool-btn" title="More Tools">
+                    <i data-lucide="more-horizontal"></i>
+                </button>
+                <div id="moreToolsMenu" class="dropdown-menu more-menu hidden">
+                    <button id="triangleBtn" class="menu-item tool-btn" title="Triangle (T)">
+                        <i data-lucide="triangle"></i>
+                        <span>Triangle</span>
+                    </button>
+                    <button id="diamondBtn" class="menu-item tool-btn" title="Decision (D)">
+                        <i data-lucide="rhombus"></i>
+                        <span>Decision</span>
+                    </button>
+                    <button id="parallelogramBtn" class="menu-item tool-btn" title="Input/Output (I)">
+                        <i data-lucide="rectangle-horizontal" style="transform: skewX(-15deg);"></i>
+                        <span>Input/Output</span>
+                    </button>
+                    <button id="roundedRectBtn" class="menu-item tool-btn" title="Terminal (M)">
+                        <i data-lucide="rectangle-horizontal"></i>
+                        <span>Terminal</span>
+                    </button>
+                    <button id="databaseBtn" class="menu-item tool-btn" title="Database">
+                        <i data-lucide="database"></i>
+                        <span>Database</span>
+                    </button>
+                    <button id="hexagonBtn" class="menu-item tool-btn" title="Preparation">
+                        <i data-lucide="hexagon"></i>
+                        <span>Preparation</span>
+                    </button>
+                    <div class="menu-divider"></div>
+                    <button id="arrowBtn" class="menu-item tool-btn" title="Arrow (A)">
+                        <i data-lucide="arrow-up-right"></i>
+                        <span>Arrow</span>
+                    </button>
+                    <button id="lineBtn" class="menu-item tool-btn" title="Line (L)">
+                        <i data-lucide="minus"></i>
+                        <span>Line</span>
+                    </button>
+                </div>
+            </div>
+            <div class="divider"></div>
+            <button id="eraserBtn" class="tool-btn" title="Eraser (E)">
+                <i data-lucide="eraser"></i>
+            </button>
+            <div class="divider"></div>
+            <!-- Settings Refactored -->
+            <div class="tool-settings">
+                <div class="color-picker-wrapper small">
+                    <input type="color" id="colorPicker" value="#000000" title="Change Color">
+                </div>
+                <div class="divider"></div>
+                <div class="size-slider-container">
+                    <input type="range" id="sizeSlider" min="1" max="50" value="5" title="Stroke Size">
+                    <span id="sizeValue" class="size-badge">5</span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Top Right Settings Trigger -->
+        <div class="settings-trigger-container">
+            <button id="sidebarToggleBtn" class="toolbar-btn settings-btn" title="Toggle Settings (Later)">
+                <i data-lucide="settings"></i>
+            </button>
+        </div>
+
+        <!-- Right Sidebar -->
+        <aside id="rightSidebar" class="right-sidebar">
+            <div class="sidebar-header">
+                <h3>Flowchart Shapes</h3>
+                <button id="closeSidebarBtn" class="close-btn">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="sidebar-content">
+                <div class="shapes-grid">
+                    <button class="sidebar-tool-btn" data-tool="rect" title="Process">
+                        <i data-lucide="square"></i>
+                        <span>Process</span>
+                    </button>
+                    <button class="sidebar-tool-btn" data-tool="roundedRect" title="Terminal">
+                        <i data-lucide="rectangle-horizontal"></i>
+                        <span>Terminal</span>
+                    </button>
+                    <button class="sidebar-tool-btn" data-tool="diamond" title="Decision">
+                        <i data-lucide="rhombus"></i>
+                        <span>Decision</span>
+                    </button>
+                    <button class="sidebar-tool-btn" data-tool="parallelogram" title="Input/Output">
+                        <i data-lucide="rectangle-horizontal" style="transform: skewX(-15deg);"></i>
+                        <span>I/O</span>
+                    </button>
+                    <button class="sidebar-tool-btn" data-tool="database" title="Database">
+                        <i data-lucide="database"></i>
+                        <span>Database</span>
+                    </button>
+                    <button class="sidebar-tool-btn" data-tool="hexagon" title="Preparation">
+                        <i data-lucide="hexagon"></i>
+                        <span>Prep</span>
+                    </button>
+                </div>
+                <div class="menu-divider"></div>
+                <p class="sidebar-hint">Select a shape and drag on the canvas to draw.</p>
+            </div>
+        </aside>
+
+        <main class="viewport">
+            <canvas id="drawingCanvas"></canvas>
+        </main>
+    </div>
+    <script src="script.js"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>

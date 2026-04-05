@@ -1,0 +1,420 @@
+:root {
+    --bg-whiteboard: #ffffff;
+    --bg-grid: #f3f4f6;
+    --bg-panel: rgba(255, 255, 255, 0.95);
+    --border-color: #e5e7eb;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --primary: #4f46e5;
+    --primary-light: #e0e7ff;
+    --danger: #ef4444;
+    --text: #1f2937;
+    --text-muted: #6b7280;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: var(--text);
+    overflow: hidden;
+    background-color: #f1f5f9;
+}
+
+.app-container {
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+    display: flex;
+}
+
+/* Base Styles for Floating UI Containers */
+.toolbar, .settings-trigger-container, .file-dropdown-container {
+    position: fixed;
+    background-color: var(--bg-panel);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    z-index: 1000;
+}
+
+/* Button Styles (Relative to Containers) */
+.toolbar-btn, .tool-btn, .settings-btn {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text);
+    transition: all 0.2s ease;
+    background: none;
+    border: 1px solid transparent;
+    border-radius: 8px;
+}
+
+.toolbar-btn:hover, .tool-btn:hover, .settings-btn:hover {
+    background-color: #f3f4f6;
+    border-color: var(--primary);
+}
+
+/* File Dropdown Container (Top-Left) */
+.file-dropdown-container {
+    top: 20px;
+    left: 20px;
+    z-index: 1100;
+}
+
+.file-btn {
+    padding: 10px 16px;
+    border: none;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: 0;
+    background-color: var(--bg-panel);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    padding: 8px;
+    min-width: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.dropdown-menu.hidden {
+    display: none;
+}
+
+.more-tools-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.more-menu {
+    top: calc(100% + 15px);
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 180px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* Size Slider Refactor */
+.size-slider-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 4px;
+}
+
+.size-slider-container input[type="range"] {
+    width: 80px;
+    cursor: pointer;
+    accent-color: var(--primary);
+}
+
+.size-badge {
+    background-color: var(--primary-light);
+    color: var(--primary);
+    padding: 2px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    min-width: 24px;
+    text-align: center;
+}
+
+.more-menu .tool-btn {
+    width: 100%;
+    justify-content: flex-start;
+    border: none;
+}
+
+.menu-item {
+    background: none;
+    border: none;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--text);
+    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.2s ease;
+}
+
+.menu-item:hover {
+    background-color: #f3f4f6;
+    color: var(--primary);
+}
+
+.menu-divider {
+    height: 1px;
+    background-color: var(--border-color);
+    margin: 4px 0;
+}
+
+/* Top Toolbar - Center */
+.top-toolbar {
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    max-width: 90vw;
+}
+
+.tool-settings {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.size-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 4px;
+}
+
+.size-group label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    white-space: nowrap;
+}
+
+.size-group input[type="number"] {
+    width: 45px;
+    padding: 4px 6px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background-color: white;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.size-group input[type="number"]:focus {
+    border-color: var(--primary);
+}
+
+.size-group .unit {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+/* Settings Trigger - Top Right */
+.settings-trigger-container {
+    top: 20px;
+    right: 20px;
+    z-index: 1100;
+}
+
+.settings-btn {
+    padding: 10px;
+    border: none;
+}
+
+/* Right Sidebar */
+.right-sidebar {
+    position: fixed;
+    top: 0;
+    right: -320px; /* Initially off-screen */
+    width: 320px;
+    height: 100vh;
+    background-color: var(--bg-panel);
+    backdrop-filter: blur(8px);
+    border-left: 1px solid var(--border-color);
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+    z-index: 2000;
+    transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.right-sidebar.open {
+    right: 0;
+}
+
+.shapes-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+.sidebar-tool-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px 8px;
+    background-color: white;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: var(--text);
+}
+
+.sidebar-tool-btn i {
+    width: 24px;
+    height: 24px;
+    color: var(--text-muted);
+}
+
+.sidebar-tool-btn span {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.sidebar-tool-btn:hover {
+    background-color: var(--primary-light);
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.sidebar-tool-btn:hover i {
+    color: var(--primary);
+}
+
+.sidebar-tool-btn.active {
+    background-color: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+.sidebar-tool-btn.active i {
+    color: white;
+}
+
+.sidebar-hint {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-align: center;
+    line-height: 1.5;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 16px;
+}
+
+.sidebar-header h3 {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    padding: 4px;
+    display: flex;
+}
+
+.close-btn:hover {
+    color: var(--danger);
+}
+
+.sidebar-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+/* Toolbar Specific Styles */
+.tool-btn.active {
+    background-color: var(--primary-light);
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+.divider {
+    width: 1px;
+    height: 24px;
+    background-color: var(--border-color);
+    margin: 4px 4px;
+}
+
+/* Color Picker in Top Toolbar */
+.color-picker-wrapper.small {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+    display: flex;
+}
+
+.color-picker-wrapper.small input[type="color"] {
+    width: 100%;
+    height: 100%;
+    transform: scale(2);
+    cursor: pointer;
+    border: none;
+}
+
+/* Viewport & Canvas */
+.viewport {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    background-color: var(--bg-whiteboard);
+}
+
+canvas {
+    display: block;
+    cursor: crosshair;
+}
+
+/* Lucide Icons sizing */
+i[data-lucide] {
+    width: 20px;
+    height: 20px;
+}
+
+@media (max-width: 1024px) {
+    .top-toolbar {
+        top: auto;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        max-width: 95vw;
+        flex-wrap: wrap;
+        height: auto;
+        justify-content: center;
+    }
+}

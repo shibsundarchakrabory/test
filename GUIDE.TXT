@@ -1,0 +1,5 @@
+THIS PROJECTS ARE GOUNG TO be added in an electron app as integratet features and workspacess this projects should support ofline workability
+
+
+
+and ythis projects are also goung to be hosted on github pages as individual apps
