@@ -73,14 +73,20 @@ body {
     height: 64px;
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Logo left, Actions right on PC */
     padding: 0 24px;
     background: var(--bg-glass);
     backdrop-filter: blur(var(--panel-blur));
     border-bottom: 1px solid var(--border-glass);
     z-index: 100;
     gap: 16px;
-    overflow: hidden; /* Clip content, don't allow nav itself to scroll */
+    overflow-x: auto;          /* Entire bar scrolls on small screens */
+    overflow-y: hidden;
+    scrollbar-width: none;     /* Hide scrollbar — still scrollable */
+    -ms-overflow-style: none;
+}
+
+.top-nav::-webkit-scrollbar {
+    display: none;
 }
 
 .logo {
@@ -91,8 +97,13 @@ body {
     font-size: 1.25rem;
     font-weight: 700;
     letter-spacing: -0.5px;
-    flex-shrink: 0; /* Keep logo size fixed — don't compress it */
+    flex-shrink: 0;
     white-space: nowrap;
+    position: sticky;  /* Stays visible as bar scrolls */
+    left: 24px;
+    z-index: 2;
+    background: var(--bg-glass); /* Cover scrolling content behind it */
+    padding-right: 8px;
 }
 
 .logo-icon {
@@ -104,17 +115,8 @@ body {
     display: flex;
     gap: 12px;
     align-items: center;
-    flex-shrink: 1;       /* Can shrink so it doesn't push logo off screen */
-    min-width: 0;         /* Required for overflow to work inside flex */
-    overflow-x: auto;     /* Scroll THIS section, not the whole nav */
-    overflow-y: hidden;
-    padding-bottom: 2px;  /* Prevent scrollbar from clipping buttons */
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-
-.header-actions::-webkit-scrollbar {
-    display: none;
+    flex-shrink: 0;
+    min-width: max-content; /* Force full natural width so parent must scroll */
 }
 
 .nav-btn {
@@ -159,6 +161,7 @@ body {
     font-size: 0.9rem;
     outline: none;
     cursor: pointer;
+    flex-shrink: 0;
 }
 
 .nav-select:hover {
@@ -174,6 +177,7 @@ body {
     position: relative;
     display: flex;
     align-items: center;
+    flex-shrink: 0;
 }
 
 .search-icon {
@@ -206,6 +210,7 @@ body {
 .history-actions {
     display: flex;
     gap: 4px;
+    flex-shrink: 0;
 }
 
 .divider-header {
@@ -215,6 +220,7 @@ body {
     margin: 0 16px;
     flex-shrink: 0;
 }
+
 
 /* ============================================================
    RESPONSIVE TOP BAR — Progressive Reduction
