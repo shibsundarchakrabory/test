@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ViveView Text Editor</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Lucide icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts: Inter and Outfit -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Top Navigation -->
+        <header class="top-nav">
+            <div class="logo">
+                <i data-lucide="file-text" class="logo-icon"></i>
+
+            </div>
+
+            <div class="header-main">
+                <div class="doc-title-container">
+                    <input type="text" id="docTitle" value="Untitled Document" class="nav-input">
+                </div>
+
+                <div class="divider-header"></div>
+
+                <!-- Formatting Toolbar -->
+                <div class="header-toolbar">
+                    <div class="tool-group">
+                        <select id="formatBlock" class="tool-select">
+                            <option value="p">Paragraph</option>
+                            <option value="h1">Heading 1</option>
+                            <option value="h2">Heading 2</option>
+                            <option value="h3">Heading 3</option>
+                            <option value="pre">Code Block</option>
+                        </select>
+                    </div>
+                    <div class="divider-v"></div>
+                    <div class="tool-group">
+                        <button class="tool-btn" data-command="bold" title="Bold (Ctrl+B)">
+                            <i data-lucide="bold"></i>
+                        </button>
+                        <button class="tool-btn" data-command="italic" title="Italic (Ctrl+I)">
+                            <i data-lucide="italic"></i>
+                        </button>
+                        <button class="tool-btn" data-command="underline" title="Underline (Ctrl+U)">
+                            <i data-lucide="underline"></i>
+                        </button>
+                    </div>
+                    <div class="divider-v"></div>
+                    <div class="tool-group">
+                        <button class="tool-btn" data-command="insertUnorderedList" title="Bullet List">
+                            <i data-lucide="list"></i>
+                        </button>
+                        <button class="tool-btn" data-command="insertOrderedList" title="Numbered List">
+                            <i data-lucide="list-ordered"></i>
+                        </button>
+                    </div>
+                    <div class="divider-v"></div>
+                    <div class="tool-group">
+                        <button class="tool-btn" data-command="justifyLeft" title="Align Left">
+                            <i data-lucide="align-left"></i>
+                        </button>
+                        <button class="tool-btn" data-command="justifyCenter" title="Align Center">
+                            <i data-lucide="align-center"></i>
+                        </button>
+                        <button class="tool-btn" data-command="justifyRight" title="Align Right">
+                            <i data-lucide="align-right"></i>
+                        </button>
+                    </div>
+                    <div class="divider-v"></div>
+                    <div class="tool-group">
+                        <button class="tool-btn" id="linkBtn" title="Insert Link">
+                            <i data-lucide="link"></i>
+                        </button>
+                        <button class="tool-btn" id="imageBtn" title="Insert Image">
+                            <i data-lucide="image"></i>
+                        </button>
+                        <button class="tool-btn" id="clearBtn" title="Clear Formatting">
+                            <i data-lucide="remove-formatting"></i>
+                        </button>
+                    </div>
+                    <div class="divider-v"></div>
+                    <div class="color-picker-group">
+                        <div class="color-tool" title="Text Color" id="foreColorTool">
+                            <i data-lucide="type"></i>
+                            <div class="color-indicator"></div>
+                            <input type="color" id="foreColor" value="#ffffff">
+                        </div>
+                        <div class="color-tool" title="Highlight Color" id="hiliteColorTool">
+                            <i data-lucide="highlighter"></i>
+                            <div class="color-indicator"></div>
+                            <input type="color" id="hiliteColor" value="#3b82f6">
+                        </div>
+                        <div class="color-tool" title="Page Background" id="pageColorTool">
+                            <i data-lucide="layout"></i>
+                            <div class="color-indicator"></div>
+                            <input type="color" id="pageColor" value="#1a1e2e">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="header-actions">
+                <div class="divider-header"></div>
+                <div class="history-actions">
+                    <button id="undoBtn" class="nav-btn" title="Undo (Ctrl+Z)">
+                        <i data-lucide="undo"></i>
+                    </button>
+                    <button id="redoBtn" class="nav-btn" title="Redo (Ctrl+Y)">
+                        <i data-lucide="redo"></i>
+                    </button>
+                </div>
+                <div class="divider-header"></div>
+                <!-- <button id="focusModeBtn" class="nav-btn" title="Focus Mode (F)">
+                    <i data-lucide="maximize"></i>
+                    <span>Zen</span>
+                </button> -->
+                <button id="sidebarToggleBtn" class="nav-btn" title="Toggle Sidebar (S)">
+                    <i data-lucide="panel-right-close"></i>
+                </button>
+                <div class="divider-header"></div>
+                <button id="downloadBtn" class="nav-btn primary" title="Download as HTML">
+                    <i data-lucide="download"></i>
+                    <span>Export</span>
+                </button>
+                <button id="saveBtn" class="nav-btn primary" title="Save to Local Storage">
+                    <i data-lucide="save"></i>
+                    <span>Save</span>
+                </button>
+            </div>
+            <!-- Shortcut Hints -->
+
+        </header>
+
+        <!-- Main Workspace -->
+        <div class="workspace">
+            <main class="editor-container">
+                <div id="editor" contenteditable="true" spellcheck="true"
+                    placeholder="Start writing something amazing..."></div>
+            </main>
+
+            <!-- Status Bar / Side Info -->
+            <aside class="side-info">
+                <div class="info-group">
+                    <label>Theme</label>
+                    <div class="theme-grid">
+                        <button class="theme-btn active" data-theme="cosmic" title="Cosmic Dark"></button>
+                        <button class="theme-btn" data-theme="emerald" title="Emerald Growth"></button>
+                        <button class="theme-btn" data-theme="slate" title="Slate Focus"></button>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <!-- Status Bar -->
+        <footer class="status-bar">
+            <div class="status-left">
+                <div class="status-item">
+                    <i data-lucide="info" class="status-icon"></i>
+                    <span id="wordCount">0</span> words
+                </div>
+                <div class="status-item">
+                    <span id="charCount">0</span> characters
+                </div>
+                <div class="status-item">
+                    <i data-lucide="clock" class="status-icon"></i>
+                    <span id="readTime">1 min</span> read
+                </div>
+            </div>
+            <div class="status-right">
+                <div class="status-item">
+                    <i data-lucide="cloud-check" class="status-icon"></i>
+                    <span id="lastSavedText">Not saved yet</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
